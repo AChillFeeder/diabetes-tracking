@@ -4,9 +4,7 @@ from flask import Flask, request, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 import os
 from datetime import datetime
-from sqlalchemy import exc
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.sql.elements import Null # to catch errors
+from sqlalchemy.exc import IntegrityError # to catch errors
 
 # App configuration
 app = Flask(__name__)
@@ -30,7 +28,6 @@ class User(db.Model):
     def __repr__(self) -> str:
         return f"<USER OBJECT>\nusername: {self.username}\npassword: {self.password}\nname: {self.name}"
 
-
 class Day(db.Model):
     __tablename__ = "day"
     id = db.Column(db.Integer, primary_key=True)
@@ -45,13 +42,12 @@ class Day(db.Model):
 
 
 
-
-# routes
+# USER routes
 @app.route("/user/register", methods=["POST"])
 def create_user() -> tuple:
     """
-        Take USERNAME, PASSWORD, NAME as arguments
-        Create a user and return {"message": message}, HTTP Status Code 200 - 406
+        Take USERNAME, PASSWORD, NAME as arguments\n
+        Create a user and return HTTP Status Code 201 - 406
     """
     data = request.json
     new_user = User(
@@ -62,7 +58,7 @@ def create_user() -> tuple:
     try:
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({"message": "User created"}), 200 # 200 for OK
+        return jsonify({"message": "User created"}), 201 # 201 for Created
     except IntegrityError:
         db.session.rollback()
         return jsonify({"message": "Duplicate username"}), 406 # 406 for Not Acceptable
@@ -70,9 +66,9 @@ def create_user() -> tuple:
 @app.route("/user/connect", methods=["POST"])
 def connect_user() -> tuple:
     """
-        Take USERNAME, PASSWORD as arguments
-        Check the creditentials and returns {"message": message, "name": name, "days": days, "user_id": user_id}
-        HTTP Status Code 200 - 401
+        Take USERNAME, PASSWORD as arguments\n
+        Check the creditentials and returns {"message": message, "name": name, "days": days, "user_id": user_id}\n
+        HTTP Status Code 201 - 401
     """
     data = request.json
     potential_user = User.query.filter_by(username=data["username"]).first()
@@ -84,16 +80,16 @@ def connect_user() -> tuple:
         # return message
         return jsonify(
                 {"message": "login successful", "name": potential_user.name, "days": "", "user_id": potential_user.id}
-            ), 200
+            ), 201
     else:
         return jsonify(
-                {"message": "login failed", "name": "", "days": "", "user_id": ""}
+                {"message": "login failed"}
             ), 401 # 401 for Unauthorized
 
 @app.route("/user/days", methods=["GET"])
 def get_user_days() -> tuple:
     """
-        Takes NO DATA
+        Takes NO DATA\n
         Returns {"message": message, "username": username, "days": days}, HTTP Status Code 200 - 500
     """
 
@@ -119,17 +115,21 @@ def get_user_days() -> tuple:
         return jsonify({"message": exc}), 500
 
 @app.route("/user/logout", methods=["GET"])
-def logout():
+def logout() -> tuple:
+    """
+        Takes NO ARGUMENTS\n
+        Deletes user's session
+    """
     session.pop("current_user_id", None)
     return {"message": "logged out successfully"}, 200
 
 
-
+# DAY routes
 @app.route("/day/add", methods=["POST"])
 def add_day() -> tuple:
     """
-        Take DATE, WEIGHT, SUGAR-AMOUNT, USER_ID as arguments
-        Create a user and return {"message": message}, HTTP Status Code 200 - 500
+        Take DATE, WEIGHT, SUGAR-AMOUNT, USER_ID as arguments\n
+        Create a user and return HTTP Status Code 201 - 500
     """
     data = request.json
     if "date" in data.keys():
@@ -144,26 +144,63 @@ def add_day() -> tuple:
     try:
         db.session.add(new_day)
         db.session.commit()
-        return jsonify({"message": "Day created"}), 200 # 200 for OK
+        return jsonify({"message": "Day created"}), 201
     except Exception as exc:
         print(exc)
         db.session.rollback()
         return jsonify({"message": "An error occured"}), 500 # 500 for Internal Server Error
 
-@app.route("/day/edit", methods=["POST"])
+@app.route("/day/edit", methods=["PATCH"])
 def edit_day() -> tuple:
-    pass
+    """
+        Takes ID, DATE, WEIGHT, SUGAR_AMOUNT as argument\n
+        returns status code 200
+    """
+    day_to_update = Day.query.filter_by(id=request.json["id"]).first()
+    try:
+        if not day_to_update.user_id == session["current_user_id"]:
+            return {"message": "unauthorized"}, 401 # 401 for  Unauthorized
+    except AttributeError:
+        return {"message": "ID doesn't exist"}, 400 # 400 for Bad Request
+    except KeyError:
+        return {"message": "Not logged in"}, 403 # 403 for Forbidden
+
+    try:
+        day_to_update.weight = request.json["weight"]
+        day_to_update.sugar_amount = request.json["sugar_amount"]
+        db.session.commit()
+    except Exception as exc:
+        db.session.rollback()
+        return {"message": str(exc)}, 500 # 500 for Internal Error
+
+    return {"message": "day updated successfully"}, 200 # 200 for OK
 
 @app.route("/day/delete", methods=["DELETE"])
 def delete_day() -> tuple:
-    pass
+    """
+        Takes ID as argument
+        returns status code 200
+    """
+    id = request.json["id"]
+    day_to_delete = Day.query.filter_by(id=id).first()
 
-# TESTS ONLY
-# @app.route("/user/get_all_users", methods=["GET"])
-# def get_all_users():
-#     users = User.query.all() 
-#     users = [{user.username: user.name} for user in users]
-#     return jsonify(users), 200
+    try:
+        if not day_to_delete.user_id == session["current_user_id"]:
+            return {"message": "unauthorized"}, 401
+    except AttributeError:
+        return {"message": "ID doesn't exist"}, 400 # 400 for Bad Request
+    except KeyError:
+        return {"message": "Not logged in"}, 403 # 403 for Forbidden
+
+    try:
+        db.session.delete(day_to_delete)
+        db.session.commit()
+    except Exception as exc:
+        db.session.rollback()
+        return {"message": "there was an error: " + exc}, 500
+
+    return {"message": "day deleted"}, 200
+
 
 
 if __name__ == '__main__':
