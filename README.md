@@ -27,3 +27,10 @@ returns status code 200
 ### delete
 Takes ID as argument
 returns status code 200
+
+
+
+Changelog:
+- removed flask-session
+- Home page shows days
+- use Effect to fix the infinite loop issue

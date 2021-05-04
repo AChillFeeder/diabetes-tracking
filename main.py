@@ -42,7 +42,7 @@ class Day(db.Model):
     def __repr__(self) -> str:
         return f"<DAY OBJECT>\nuser: {self.user}\nweight: {self.weight}\nsugar_amount: {self.sugar_amount}"
 
-
+USER_SESSION = ""  # add GLOBAL if you want to change it's value inside a function
 
 # USER routes
 @app.route("/user/register", methods=["POST"])
@@ -77,7 +77,9 @@ def connect_user() -> tuple:
     if potential_user and potential_user.password == data["password"]: # Connected successfully!
 
         # session
-        session["current_user_id"] = potential_user.id
+        # session["current_user_id"] = potential_user.id
+        global USER_SESSION
+        USER_SESSION = potential_user.id
 
         # return message
         return jsonify(
@@ -94,9 +96,10 @@ def get_user_days() -> tuple:
         Takes NO DATA\n
         Returns {"message": message, "username": username, "days": days}, HTTP Status Code 200 - 500
     """
-    try:
-        user_id = session["current_user_id"]
-    except KeyError:
+
+    if USER_SESSION:
+        user_id = USER_SESSION
+    else:
         return jsonify({"message": "not connected"}), 403
 
     try:
@@ -121,7 +124,9 @@ def logout() -> tuple:
         Takes NO ARGUMENTS\n
         Deletes user's session
     """
-    session.pop("current_user_id", None)
+    # session.pop("current_user_id", None)
+    global USER_SESSION
+    USER_SESSION = ""
     return {"message": "logged out successfully"}, 200
 
 
@@ -142,6 +147,10 @@ def add_day() -> tuple:
         sugar_amount = data["sugar_amount"],
         user_id = data["user_id"]
     )
+
+    if not USER_SESSION:
+        return {"message": "Not logged in"}, 403 # 403 for Forbidden
+
     try:
         db.session.add(new_day)
         db.session.commit()
@@ -158,13 +167,14 @@ def edit_day() -> tuple:
         returns status code 200
     """
     day_to_update = Day.query.filter_by(id=request.json["id"]).first()
+
+    if not USER_SESSION:
+        return {"message": "Not logged in"}, 403 # 403 for Forbidden
     try:
-        if not day_to_update.user_id == session["current_user_id"]:
+        if not day_to_update.user_id == USER_SESSION:
             return {"message": "unauthorized"}, 401 # 401 for  Unauthorized
     except AttributeError:
         return {"message": "ID doesn't exist"}, 400 # 400 for Bad Request
-    except KeyError:
-        return {"message": "Not logged in"}, 403 # 403 for Forbidden
 
     try:
         day_to_update.weight = request.json["weight"]
@@ -185,13 +195,13 @@ def delete_day() -> tuple:
     id = request.json["id"]
     day_to_delete = Day.query.filter_by(id=id).first()
 
+    if not USER_SESSION:
+        return {"message": "Not logged in"}, 403 # 403 for Forbidden
     try:
-        if not day_to_delete.user_id == session["current_user_id"]:
-            return {"message": "unauthorized"}, 401
+        if not day_to_delete.user_id == USER_SESSION:
+            return {"message": "unauthorized"}, 401 # 401 for  Unauthorized
     except AttributeError:
         return {"message": "ID doesn't exist"}, 400 # 400 for Bad Request
-    except KeyError:
-        return {"message": "Not logged in"}, 403 # 403 for Forbidden
 
     try:
         db.session.delete(day_to_delete)
