@@ -137,19 +137,23 @@ def add_day() -> tuple:
         Take DATE, WEIGHT, SUGAR-AMOUNT, USER_ID as arguments\n
         Create a user and return HTTP Status Code 201 - 500
     """
-    data = request.json
-    if "date" in data.keys():
-        # add option to input a different day
-        pass
+
+    if not USER_SESSION:
+        return {"message": "Not logged in"}, 403 # 403 for Forbidden
+
+    # add option to input a different day
+
+    # keep the option to either work with form data or JSON
+    data = request.json or {
+        "weight": request.form["weight"],
+        "sugar_amount": request.form["sugar_amount"]
+    }
 
     new_day = Day(
         weight = data["weight"],
         sugar_amount = data["sugar_amount"],
-        user_id = data["user_id"]
+        user_id = USER_SESSION # can only change current user
     )
-
-    if not USER_SESSION:
-        return {"message": "Not logged in"}, 403 # 403 for Forbidden
 
     try:
         db.session.add(new_day)

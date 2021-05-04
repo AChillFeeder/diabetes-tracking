@@ -30,7 +30,11 @@ returns status code 200
 
 
 
-Changelog:
+# CHANGELOG:
 - removed flask-session
 - Home page shows days
 - use Effect to fix the infinite loop issue
+- Add Day now accepts both form data and JSON
+
+# DO'S:
+- update API documentation, some returns have changed

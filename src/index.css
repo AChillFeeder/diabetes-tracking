@@ -22,6 +22,19 @@ body{
     background-color: var(--background-color);
     height: 100%;
 }
+
+table{
+    width: 100%;
+    text-align: center;
+}
+table, th, td{
+    border: 1px solid var(--main-color);
+    border-collapse: collapse;
+}
+th, td{
+    padding: 10px;
+}
+
 button:hover{
     cursor: pointer;
 }
@@ -94,38 +107,14 @@ button:hover{
 }
 
 
-/* Home page */
-.content{
-    padding: 80px;
-}
-
-.content h3{
+h3{
     font-size: 2.5em;
-    margin-left: 10%;
+    margin: 0 0 2% 5%;
 }
 
-/* .content .days{
-    margin-top: 5%;
+/* Home page */
+.home-content, .newDay-content{
+    padding: 50px;
 }
 
-.content .days .day{
-    border: 1px solid var(--secondary-color);
-    padding: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin-top: 1%;
-} */
 
-
-table{
-    width: 100%;
-    text-align: center;
-}
-table, th, td{
-    border: 1px solid black;
-    border-collapse: collapse;
-}
-th, td{
-    padding: 10px;
-}

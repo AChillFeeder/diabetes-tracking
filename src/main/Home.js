@@ -15,20 +15,19 @@ const Home = () => {
             if(data.retrieved){
                 setDays(data.days)
             }else{
-                setError("Impossible de trouver vos jours pour le moment.")
+                setError("Impossible de trouver vos jours pour le moment. | " + data.message)
             }
                 
             })
     }, [])
 
     return(
-        <div className="content">
+        <div className="home-content">
             <h3>Vos jours: </h3>
             {
                 days 
                 &&
                 <div className="days"> 
-                
                     <table>
                         <tr>
                             <th>ID</th>

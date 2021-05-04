@@ -27,7 +27,7 @@ function App() {
                         <Navbar></Navbar>
                         <Home></Home>
                     </Route>
-                    <Route exact path='/add-new-day'>
+                    <Route exact path='/new-day'>
                         <Navbar></Navbar>
                         <NewDay></NewDay>
                     </Route>
