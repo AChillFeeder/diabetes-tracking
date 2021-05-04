@@ -1,6 +1,7 @@
 import {Link} from 'react-router-dom';
 import { useState } from "react";
 import { useHistory } from "react-router";
+import {link} from "../usables/baseLink.js";
 
 const Register = () => {
 
@@ -14,7 +15,7 @@ const Register = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        fetch(`http://192.168.1.150:8000/register`, {
+        fetch(`${link}/user/register`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({"username": username, "password": password, "name": name})
@@ -33,7 +34,6 @@ const Register = () => {
 
     return ( 
         <div className="register">
-            {error && <p>error: {error}</p>}
             <form onSubmit={(event) => handleSubmit(event)}>
                 <label htmlFor="username">Nom d'utilisateur:</label>
                 <input type="text" name="username" placeholder="Entrez votre nom d'utilisateur" onChange={(e) => setUsername(e.target.value)} className="form-input"/>
@@ -43,6 +43,7 @@ const Register = () => {
                 <input type="text" name="name" placeholder="Entrez votre nom" onChange={(e) => setName(e.target.value)} className="form-input"/>
                 <button>Créer votre compte</button>
                 <Link to='/'>Vous avez déja un compte?</Link>
+                {error && <p class="error">Erreur: {error}</p>}
             </form>
         </div>
      );

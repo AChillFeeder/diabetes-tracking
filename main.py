@@ -5,9 +5,11 @@ from flask_sqlalchemy import SQLAlchemy
 import os
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError # to catch errors
+from flask_cors import CORS
 
 # App configuration
 app = Flask(__name__)
+CORS(app)
 basedir = os.path.abspath(os.path.dirname(__file__)) # absolute path of this file
 DEBUG = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite')
@@ -58,10 +60,10 @@ def create_user() -> tuple:
     try:
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({"message": "User created"}), 201 # 201 for Created
+        return jsonify({"message": "User created", "registered": True}), 201 # 201 for Created
     except IntegrityError:
         db.session.rollback()
-        return jsonify({"message": "Duplicate username"}), 406 # 406 for Not Acceptable
+        return jsonify({"message": "Duplicate username", "registered": False}), 406 # 406 for Not Acceptable
 
 @app.route("/user/connect", methods=["POST"])
 def connect_user() -> tuple:
@@ -79,11 +81,11 @@ def connect_user() -> tuple:
 
         # return message
         return jsonify(
-                {"message": "login successful", "name": potential_user.name, "days": "", "user_id": potential_user.id}
+                {"message": "login successful", "name": potential_user.name, "days": "", "user_id": potential_user.id, "connected": True}
             ), 201
     else:
         return jsonify(
-                {"message": "login failed"}
+                {"message": "login failed", "connected": False}
             ), 401 # 401 for Unauthorized
 
 @app.route("/user/days", methods=["GET"])
@@ -92,7 +94,6 @@ def get_user_days() -> tuple:
         Takes NO DATA\n
         Returns {"message": message, "username": username, "days": days}, HTTP Status Code 200 - 500
     """
-
     try:
         user_id = session["current_user_id"]
     except KeyError:
@@ -110,9 +111,9 @@ def get_user_days() -> tuple:
             } 
             for day in relevant_days
         ]
-        return jsonify({"message": "success", "days": serialized_days}), 200
+        return jsonify({"message": "success", "days": serialized_days, "retrieved": True}), 200
     except Exception as exc:
-        return jsonify({"message": exc}), 500
+        return jsonify({"message": str(exc), "retrieved": False}), 500
 
 @app.route("/user/logout", methods=["GET"])
 def logout() -> tuple:

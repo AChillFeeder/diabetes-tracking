@@ -1,6 +1,9 @@
+
+import Days from "../microComponents/Days.js";
+
 const Home = () => {
     return ( 
-        <div className="Home"></div>
+        <div className="home"></div>
      );
 }
  
