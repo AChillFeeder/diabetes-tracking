@@ -18,7 +18,6 @@ const Navbar = () => {
 
     return ( 
         <div className="nav-bar">
-            <h1>Traqueur</h1>
             <ul>
                 <Link to='/home'>Acceuil</Link>
                 <Link to='/new-day'>Ajouter un nouveau jour</Link>

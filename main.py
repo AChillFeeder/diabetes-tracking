@@ -129,10 +129,10 @@ def logout() -> tuple:
     USER_SESSION = ""
     return {"message": "logged out successfully"}, 200
 
-
 @app.route("/user/isConnected", methods=["GET"])
 def isConnected():
-    return jsonify({"connected": USER_SESSION})
+    return jsonify({"connected": USER_SESSION}), 200
+
 
 # DAY routes
 @app.route("/day/add", methods=["POST"])
@@ -171,7 +171,7 @@ def add_day() -> tuple:
 @app.route("/day/edit", methods=["PATCH"])
 def edit_day() -> tuple:
     """
-        Takes ID, DATE, WEIGHT, SUGAR_AMOUNT as argument\n
+        Takes ID, WEIGHT, SUGAR_AMOUNT as argument\n
         returns status code 200
     """
     day_to_update = Day.query.filter_by(id=request.json["id"]).first()

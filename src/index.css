@@ -58,9 +58,7 @@ button:hover{
 .nav-bar h1{
     color: var(--secondary-color);
 }
-.nav-bar ul{
-    margin-left: auto;
-}
+
 .nav-bar a{
     margin-left: 16px;
     text-decoration: none;
@@ -84,7 +82,8 @@ button:hover{
 .content .login form label, .content .register form label{
     font-size: 0.8em;
 }
-.content .login form input, .content .register form input{
+/* .content .login form input, .content .register form input{ */
+input{
     margin-top: 5px;
     margin-bottom: 3%;
     border: none;
@@ -116,6 +115,10 @@ h3{
 /* Home page */
 .home-content, .newDay-content{
     padding: 50px;
+}
+.table-options li:hover{
+    cursor: pointer;
+    color: var(--secondary-color);
 }
 
 
