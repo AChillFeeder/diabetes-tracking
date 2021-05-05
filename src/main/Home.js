@@ -29,20 +29,25 @@ const Home = () => {
                 &&
                 <div className="days"> 
                     <table>
-                        <tr>
-                            <th>ID</th>
-                            <th>Date</th>
-                            <th>Poids</th>
-                            <th>Sucre</th>
-                        </tr>
-                        {days.map(day => (
+                        <thead>
                             <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Poids</th>
+                                <th>Sucre</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                        {days.map(day => (
+                            <tr key={day.id}>
                                 <td>{day.id}</td>
                                 <td>{day.date}</td>
                                 <td>{day.weight}</td>
                                 <td>{day.sugar_amount}</td>
                             </tr>
                         ))}
+                        </tbody>
                     </table>
 
                 </div>

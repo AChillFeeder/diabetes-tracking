@@ -1,6 +1,6 @@
 
 
-from flask import Flask, request, jsonify, session
+from flask import Flask, json, request, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 import os
 from datetime import datetime
@@ -129,6 +129,10 @@ def logout() -> tuple:
     USER_SESSION = ""
     return {"message": "logged out successfully"}, 200
 
+
+@app.route("/user/isConnected", methods=["GET"])
+def isConnected():
+    return jsonify({"connected": USER_SESSION})
 
 # DAY routes
 @app.route("/day/add", methods=["POST"])

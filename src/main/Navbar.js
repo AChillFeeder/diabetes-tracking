@@ -1,8 +1,21 @@
 import {Link, useHistory} from 'react-router-dom';
 import {ReactSession} from 'react-client-session';
+import {link} from "../usables/baseLink.js";
 
 
 const Navbar = () => {
+
+    const history = useHistory()
+    fetch(`${link}/user/isConnected`, {
+        method: 'GET',
+        headers: { "Content-Type": "application/json" }
+    }).then(response => response.json())
+    .then((data) => {
+        if(!data.connected){
+            history.push('/')
+        }
+    })
+
     return ( 
         <div className="nav-bar">
             <h1>Traqueur</h1>

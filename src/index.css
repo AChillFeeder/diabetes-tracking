@@ -112,9 +112,38 @@ h3{
     margin: 0 0 2% 5%;
 }
 
+
 /* Home page */
 .home-content, .newDay-content{
     padding: 50px;
+}
+
+
+/* STATISTICS */
+.stats{
+    width: 100%;
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+}
+.container{
+    width: 80%;
+}
+.container p{
+    
+    font-size: 1.3em;
+    text-align: center;
+}
+.graph{
+    width: 100%;
+    margin-bottom: 50px;
+}
+.tooltip-wrap{
+    color: var(--background-color);
+}
+
+.Cursor span{
+    color: var(--background-color);
 }
 
 
