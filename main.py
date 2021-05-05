@@ -52,16 +52,19 @@ def create_user() -> tuple:
         Create a user and return HTTP Status Code 201 - 406
     """
     data = request.json
-    new_user = User(
+
+    # Create user Database instance
+    new_user = User( 
         username = data["username"],
         password = data["password"],
         name = data["name"]
     )
+    
     try:
         db.session.add(new_user)
         db.session.commit()
         return jsonify({"message": "User created", "registered": True}), 201 # 201 for Created
-    except IntegrityError:
+    except IntegrityError: # Will be broken if it's unique or nullable
         db.session.rollback()
         return jsonify({"message": "Duplicate username", "registered": False}), 406 # 406 for Not Acceptable
 

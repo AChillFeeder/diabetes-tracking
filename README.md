@@ -38,6 +38,8 @@ returns status code 200
 - Added graph
 - Added delete option
 
+- Input fields are now Required
+
 # DO'S:
 - update API documentation, some returns have changed
 - change weight to FLOAT (done but look out for issues)

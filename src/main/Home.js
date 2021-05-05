@@ -5,7 +5,6 @@ const Home = () => {
 
     const [error, setError] = useState("")
     const [days, setDays] = useState([])
-    const [reload, setReload] = useState(false)
 
     useEffect(() => { // Used to avoid the infinite loop issue
         fetch(`${link}/user/days`, {

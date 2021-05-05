@@ -26,10 +26,10 @@ const NewDay = () => {
             <h3>Ajouter un nouveau jour:</h3>
             <form onSubmit={handleSubmit}>
                 <label htmlFor="weight">Poids: </label>
-                <input type="number" name="weight" step="0.01" min="0" id="weight"/>
+                <input type="number" name="weight" step="0.01" min="0" id="weight" required/>
 
                 <label htmlFor="sugar-amount">Sucre: </label>
-                <input type="number" step="0.01" min="0" name="sugar_amount" id="sugar_amount"/>
+                <input type="number" step="0.01" min="0" name="sugar_amount" id="sugar_amount" required/>
 
                 <button>Envoyer</button>
             </form>
