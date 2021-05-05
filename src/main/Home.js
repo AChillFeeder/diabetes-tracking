@@ -56,7 +56,7 @@ const Home = () => {
                                 <th>ID</th>
                                 <th>Date</th>
                                 <th>Poids</th>
-                                <th>Sucre</th>
+                                <th>Glycemie</th>
                                 <th>Options</th>
                             </tr>
                         </thead>

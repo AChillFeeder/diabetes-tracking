@@ -158,7 +158,12 @@ form *{
 
 form input{
     width: 25%;
+    margin-top: 0;
 }
+form label{
+    margin-top: 50px;
+}
+
 .newDay-content form{
     margin-left: 20%;
 }

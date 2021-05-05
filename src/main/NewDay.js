@@ -28,7 +28,7 @@ const NewDay = () => {
                 <label htmlFor="weight">Poids: </label>
                 <input type="number" name="weight" step="0.01" min="0" id="weight"/>
 
-                <label htmlFor="sugar-amount">Sucre: </label>
+                <label htmlFor="sugar-amount">Glycemie: </label>
                 <input type="number" step="0.01" min="0" name="sugar_amount" id="sugar_amount"/>
 
                 <button>Envoyer</button>
