@@ -5,18 +5,18 @@ import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
 import Navbar from './main/Navbar.js';
 import Home from './main/Home.js';
 import NewDay from './main/NewDay.js';
+import Statistics from './main/Statistics.js'
 
 import Login from './account/Login.js'
 import Register from './account/Register.js'
 
-import DayDetails from './previousDays/DayDetails.js'
 
 
 
 function App() {
     return (
         <Router>
-            <div className="app">
+            <div className="content">
                 <Switch>
                     <Route exact path='/'>
                         <Login></Login>
@@ -32,9 +32,9 @@ function App() {
                         <Navbar></Navbar>
                         <NewDay></NewDay>
                     </Route>
-                    <Route exact path='/day/:id'>
+                    <Route exact path='/stats'>
                         <Navbar></Navbar>
-                        <DayDetails></DayDetails>
+                        <Statistics></Statistics>
                     </Route>
                 </Switch>
             </div>

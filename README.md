@@ -27,3 +27,17 @@ returns status code 200
 ### delete
 Takes ID as argument
 returns status code 200
+
+
+
+# CHANGELOG:
+- removed flask-session
+- Home page shows days
+- use Effect to fix the infinite loop issue
+- Add Day now accepts both form data and JSON
+- Added graph
+- Added delete option
+
+# DO'S:
+- update API documentation, some returns have changed
+- change weight to FLOAT (done but look out for issues)

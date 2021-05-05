@@ -1,13 +1,152 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+
+:root{
+    --main-color: #333;
+    --background-color: #fff;
+    --secondary-color: #000000;
+    --error-color: rgb(197, 87, 87);
+    
+    /* reverse main and background for dark mode */
+    /* --main-color: #fff;
+    --background-color: #333; */
+}
+* {
+    margin: 0;
+    padding: 0;
+    font-family: "Quicksand";
+    color: var(--main-color);
+    list-style: none;
+}
+body{
+    background-color: var(--background-color);
+    height: 100%;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+table{
+    width: 100%;
+    text-align: center;
 }
+table, th, td{
+    border: 1px solid var(--main-color);
+    border-collapse: collapse;
+}
+th, td{
+    padding: 10px;
+}
+
+button:hover{
+    cursor: pointer;
+}
+.error{
+    color: var(--error-color);
+}
+
+
+
+
+/* NAVBAR */
+.nav-bar{
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    /* max-width: 600px; */
+    width: 80%;
+    margin: 0 auto 10px;
+    border-bottom: 1px solid var(--secondary-color);
+}
+.nav-bar h1{
+    color: var(--secondary-color);
+}
+
+.nav-bar a{
+    margin-left: 16px;
+    text-decoration: none;
+    padding: 6px;
+}
+.nav-bar a:hover{
+    color: var(--secondary-color);
+}
+
+
+/* Login form */
+.content .login form, .content .register form{
+    display: flex;
+    flex-direction: column;
+    margin-top: 10%;
+}
+.content .login form *, .content .register form *{
+    margin-top: 10px;
+    align-self: center;
+}
+.content .login form label, .content .register form label{
+    font-size: 0.8em;
+}
+/* .content .login form input, .content .register form input{ */
+input{
+    margin-top: 5px;
+    margin-bottom: 3%;
+    border: none;
+    border-bottom: 2px solid var(--main-color);
+    width: 18%;
+    padding: 5px 10px;
+    color: var(--main-color);
+}
+.content .login button, .content .register button{
+    background: transparent;
+    border: 2px solid var(--main-color);
+    padding: 10px;
+    width: 150px;
+    transition: 0.3s;
+    transition-property: background-color color;
+}
+.content .login button:hover, .content .register button:hover{
+    background-color: var(--main-color);
+    color: var(--background-color);
+}
+
+
+h3{
+    font-size: 2.5em;
+    margin: 0 0 2% 5%;
+}
+
+
+/* Home page */
+.home-content, .newDay-content{
+    padding: 50px;
+}
+.table-options li:hover{
+    cursor: pointer;
+    color: var(--secondary-color);
+}
+
+
+/* STATISTICS */
+.stats{
+    width: 100%;
+    margin-top: 5%;
+    display: flex;
+    justify-content: center;
+}
+.container{
+    width: 80%;
+}
+.container p{
+    
+    font-size: 1.3em;
+    text-align: center;
+}
+.graph{
+    width: 100%;
+    margin-bottom: 50px;
+}
+.tooltip-wrap{
+    color: var(--background-color);
+}
+
+.Cursor span{
+    color: var(--background-color);
+}
+
+

@@ -1,13 +1,15 @@
 
 
-from flask import Flask, request, jsonify, session
+from flask import Flask, json, request, jsonify, session
 from flask_sqlalchemy import SQLAlchemy
 import os
 from datetime import datetime
 from sqlalchemy.exc import IntegrityError # to catch errors
+from flask_cors import CORS
 
 # App configuration
 app = Flask(__name__)
+CORS(app)
 basedir = os.path.abspath(os.path.dirname(__file__)) # absolute path of this file
 DEBUG = True
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite')
@@ -40,7 +42,7 @@ class Day(db.Model):
     def __repr__(self) -> str:
         return f"<DAY OBJECT>\nuser: {self.user}\nweight: {self.weight}\nsugar_amount: {self.sugar_amount}"
 
-
+USER_SESSION = ""  # add GLOBAL if you want to change it's value inside a function
 
 # USER routes
 @app.route("/user/register", methods=["POST"])
@@ -58,10 +60,10 @@ def create_user() -> tuple:
     try:
         db.session.add(new_user)
         db.session.commit()
-        return jsonify({"message": "User created"}), 201 # 201 for Created
+        return jsonify({"message": "User created", "registered": True}), 201 # 201 for Created
     except IntegrityError:
         db.session.rollback()
-        return jsonify({"message": "Duplicate username"}), 406 # 406 for Not Acceptable
+        return jsonify({"message": "Duplicate username", "registered": False}), 406 # 406 for Not Acceptable
 
 @app.route("/user/connect", methods=["POST"])
 def connect_user() -> tuple:
@@ -75,15 +77,17 @@ def connect_user() -> tuple:
     if potential_user and potential_user.password == data["password"]: # Connected successfully!
 
         # session
-        session["current_user_id"] = potential_user.id
+        # session["current_user_id"] = potential_user.id
+        global USER_SESSION
+        USER_SESSION = potential_user.id
 
         # return message
         return jsonify(
-                {"message": "login successful", "name": potential_user.name, "days": "", "user_id": potential_user.id}
+                {"message": "login successful", "name": potential_user.name, "days": "", "user_id": potential_user.id, "connected": True}
             ), 201
     else:
         return jsonify(
-                {"message": "login failed"}
+                {"message": "login failed", "connected": False}
             ), 401 # 401 for Unauthorized
 
 @app.route("/user/days", methods=["GET"])
@@ -93,9 +97,9 @@ def get_user_days() -> tuple:
         Returns {"message": message, "username": username, "days": days}, HTTP Status Code 200 - 500
     """
 
-    try:
-        user_id = session["current_user_id"]
-    except KeyError:
+    if USER_SESSION:
+        user_id = USER_SESSION
+    else:
         return jsonify({"message": "not connected"}), 403
 
     try:
@@ -110,9 +114,9 @@ def get_user_days() -> tuple:
             } 
             for day in relevant_days
         ]
-        return jsonify({"message": "success", "days": serialized_days}), 200
+        return jsonify({"message": "success", "days": serialized_days, "retrieved": True}), 200
     except Exception as exc:
-        return jsonify({"message": exc}), 500
+        return jsonify({"message": str(exc), "retrieved": False}), 500
 
 @app.route("/user/logout", methods=["GET"])
 def logout() -> tuple:
@@ -120,8 +124,14 @@ def logout() -> tuple:
         Takes NO ARGUMENTS\n
         Deletes user's session
     """
-    session.pop("current_user_id", None)
+    # session.pop("current_user_id", None)
+    global USER_SESSION
+    USER_SESSION = ""
     return {"message": "logged out successfully"}, 200
+
+@app.route("/user/isConnected", methods=["GET"])
+def isConnected():
+    return jsonify({"connected": USER_SESSION}), 200
 
 
 # DAY routes
@@ -131,16 +141,24 @@ def add_day() -> tuple:
         Take DATE, WEIGHT, SUGAR-AMOUNT, USER_ID as arguments\n
         Create a user and return HTTP Status Code 201 - 500
     """
-    data = request.json
-    if "date" in data.keys():
-        # add option to input a different day
-        pass
+
+    if not USER_SESSION:
+        return {"message": "Not logged in"}, 403 # 403 for Forbidden
+
+    # add option to input a different day
+
+    # keep the option to either work with form data or JSON
+    data = request.json or {
+        "weight": request.form["weight"],
+        "sugar_amount": request.form["sugar_amount"]
+    }
 
     new_day = Day(
         weight = data["weight"],
         sugar_amount = data["sugar_amount"],
-        user_id = data["user_id"]
+        user_id = USER_SESSION # can only change current user
     )
+
     try:
         db.session.add(new_day)
         db.session.commit()
@@ -153,17 +171,18 @@ def add_day() -> tuple:
 @app.route("/day/edit", methods=["PATCH"])
 def edit_day() -> tuple:
     """
-        Takes ID, DATE, WEIGHT, SUGAR_AMOUNT as argument\n
+        Takes ID, WEIGHT, SUGAR_AMOUNT as argument\n
         returns status code 200
     """
     day_to_update = Day.query.filter_by(id=request.json["id"]).first()
+
+    if not USER_SESSION:
+        return {"message": "Not logged in"}, 403 # 403 for Forbidden
     try:
-        if not day_to_update.user_id == session["current_user_id"]:
+        if not day_to_update.user_id == USER_SESSION:
             return {"message": "unauthorized"}, 401 # 401 for  Unauthorized
     except AttributeError:
         return {"message": "ID doesn't exist"}, 400 # 400 for Bad Request
-    except KeyError:
-        return {"message": "Not logged in"}, 403 # 403 for Forbidden
 
     try:
         day_to_update.weight = request.json["weight"]
@@ -184,13 +203,13 @@ def delete_day() -> tuple:
     id = request.json["id"]
     day_to_delete = Day.query.filter_by(id=id).first()
 
+    if not USER_SESSION:
+        return {"message": "Not logged in"}, 403 # 403 for Forbidden
     try:
-        if not day_to_delete.user_id == session["current_user_id"]:
-            return {"message": "unauthorized"}, 401
+        if not day_to_delete.user_id == USER_SESSION:
+            return {"message": "unauthorized"}, 401 # 401 for  Unauthorized
     except AttributeError:
         return {"message": "ID doesn't exist"}, 400 # 400 for Bad Request
-    except KeyError:
-        return {"message": "Not logged in"}, 403 # 403 for Forbidden
 
     try:
         db.session.delete(day_to_delete)
