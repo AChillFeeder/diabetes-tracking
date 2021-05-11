@@ -1,20 +1,33 @@
 
+
+
 # API ENDPOINTS
 
 ## User routes
+
 ### register
 Take USERNAME, PASSWORD, NAME as arguments
 Create a user and return HTTP Status Code 201 - 406
+
 ### connect
 Take USERNAME, PASSWORD as arguments
 Check the creditentials and returns {"message": message, "name": name, "days": days, "user_id": user_id}
 HTTP Status Code 201 - 401
+
 ### get_user_days
 Takes NO DATA
 Returns {"message": message, "username": username, "days": days}, HTTP Status Code 200 - 500
+
 ### logout
 Takes NO ARGUMENTS
 Deletes user's session
+
+ | Arguments | JSON | HTTP Code
+-| --------- | ---- | ---------
+REGISTER | USERNAME, PASSWORD, NAME | | 201 - 406 | 
+CONNECT | USERNAME, PASSWORD | {"message": message, "name": name, "days": days, "user_id": user_id} | 201 - 401 | 
+GET_USER_DAYS | | {"message": message, "name": name, "days": days} | 200 - 500 | 
+LOGOUT | | | 200 | 
 
 
 ## Day routes
@@ -41,3 +54,8 @@ returns status code 200
 # DO'S:
 - update API documentation, some returns have changed
 - change weight to FLOAT (done but look out for issues)
+
+# Screenshots:
+![Screenshot of the home screen](https://raw.githubusercontent.com/AChillFeeder/diabetes-tracking/main/screenshots/home.png)
+![Screenshot of the login screen](https://raw.githubusercontent.com/AChillFeeder/diabetes-tracking/main/screenshots/login_screen.png)
+![Screenshot of the stats screen](https://raw.githubusercontent.com/AChillFeeder/diabetes-tracking/main/screenshots/stats.png)
