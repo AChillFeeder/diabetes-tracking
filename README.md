@@ -31,8 +31,9 @@ DELETE DAY	 	| ID									| 200		|
 - Added delete option
 
 # DO'S:
-- [ ]  update API documentation, some returns have changed
+- [ ] update API documentation, some returns have changed
 - [x] change weight to FLOAT
+- [ ] Allow days to be edited, how to do it on the UI side?
 
 # Screenshots:
 ## Home screen
