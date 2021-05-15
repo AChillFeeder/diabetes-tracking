@@ -1,5 +1,6 @@
 
-
+# DESCRIPTION
+A simple application where you log your weight and glycemy every day, you can then check on your progress by going through your previous days or from the graph.
 
 # API ENDPOINTS
 
