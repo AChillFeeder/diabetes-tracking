@@ -35,6 +35,9 @@ DELETE DAY	 	| ID									| 200		|
 - [ ] update API documentation, some returns have changed
 - [x] change weight to FLOAT
 - [ ] Allow days to be edited, how to do it on the UI side?
+- [ ] Language change in option.
+- [ ] More stats ( average of this week/month, best/worst day )
+- [ ] Better Date format in Home screen
 
 # Screenshots:
 ## Home screen
