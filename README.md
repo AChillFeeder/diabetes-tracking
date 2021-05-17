@@ -39,6 +39,7 @@ DELETE DAY	 	| ID									| 200		|
 - [ ] More stats ( average of this week/month, best/worst day )
 - [ ] Better Date format in Home screen.
 - [ ] Enable theme change in Settings.
+- [ ] Only show N number of days in home screen.
 
 # Screenshots:
 ## Home screen
