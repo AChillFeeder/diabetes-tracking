@@ -16,6 +16,7 @@ A simple application where you log your weight and glycemy every day, you can th
 - [ ] Statistics page with in-depth information
 
 # DO'S:
+- [ ] Check inputs in NewDay (don't allow mood more than 10 for example)
 - [ ] Add Session decorator
 - [ ] update API documentation, some returns have changed
 - [x] change weight to FLOAT

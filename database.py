@@ -14,9 +14,8 @@ class DaysDatabase:
     def __init__(self) -> None:
         self.cursor = database.cursor(buffered=True)
 
-    def addDay(self, weight: float, sugarLevel: float, meals:List[str], mood: int, notes: List[str], iduser: int):
-        meals = ";;".join(meals)
-        sql = "INSERT INTO notes (weight, sugarLevel, meals, mood, notes, iduser) VALUES (%s, %s, %s, %s, %s, %s)"
+    def addDay(self, weight: float, sugarLevel: float, mood: int, meals:List[str],  notes: List[str], iduser: int):
+        sql = "INSERT INTO days (weight, sugarLevel, meals, mood, notes, iduser) VALUES (%s, %s, %s, %s, %s, %s)"
         self.cursor.execute(sql, (weight, sugarLevel, meals, mood, notes, iduser))
         database.commit()
         return self.cursor.lastrowid

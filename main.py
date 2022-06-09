@@ -3,6 +3,7 @@
 from flask import Flask, request, jsonify, session
 from flask_cors import CORS
 from controller import Controller
+import json
 
 import secrets
 
@@ -88,11 +89,15 @@ def add_day() -> tuple:
         Create a user and return HTTP Status Code 201 - 500
     """
     data = request.json
+    print(data["meals"])
+    print(type(data["meals"]))
+    print(data["notes"])
+    print(type(data["notes"]))
     controller.days.addDay(
         data["weight"],
         data["sugarLevel"],
-        ";;".join(data["meals"]),
         data["mood"],
+        ";;".join(data["meals"]),
         ";;".join(data["notes"]),
         controller.session
     )
