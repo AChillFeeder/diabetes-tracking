@@ -7,8 +7,6 @@ A simple application where you log your weight and glycemy every day, you can th
 - Home page shows days
 - use Effect to fix the infinite loop issue
 - Add Day now accepts both form data and JSON
-- Added graph
-- Added delete option
 
 # REFACTORING:
 - [ ] Add more properties to 'Day', Eg: meals, notes, mood
@@ -18,9 +16,11 @@ A simple application where you log your weight and glycemy every day, you can th
 # DO'S:
 - [ ] Check inputs in NewDay (don't allow mood more than 10 for example)
 - [ ] Add Session decorator
+- [ ] Graphs
+- [ ] Delete Day
+- [ ] Update Day
 - [ ] update API documentation, some returns have changed
 - [x] change weight to FLOAT
-- [ ] Allow days to be edited, how to do it on the UI side?
 - [ ] Language change in option.
 - [ ] More stats ( average of this week/month, best/worst day )
 - [ ] Better Date format in Home screen.

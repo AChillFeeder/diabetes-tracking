@@ -25,6 +25,11 @@ class DaysDatabase:
         results = self.cursor.fetchall()
         return results
 
+    def deleteDayByID(self, idday: int):
+        self.cursor.execute(f"DELETE FROM days WHERE idday={idday}")
+        database.commit()
+        return 1
+
 
 class UsersDatabase:
 

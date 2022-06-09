@@ -6,15 +6,13 @@ const Home = () => {
     const [error, setError] = useState("")
     const [days, setDays] = useState([])
     const [userData, setUserData] = useState([])
-    const [reload, setReload] = useState(false)
 
-    useEffect(() => { // Used to avoid the infinite loop issue
+    useEffect(() => {
         fetch(`${link}/user/getUserInformation`, {
             method: 'GET',
             headers: { "Content-Type": "application/json" }
         }).then(response => response.json())
         .then((response) => {
-            console.log(response)
             if(response.success){
                 setDays(response.data.userDays)
                 setUserData(response.data.userData)
@@ -35,16 +33,15 @@ const Home = () => {
             })
         }).then(window.location.reload(true))
     }
-    function handleDelete(ID){
-        console.log(ID)
-        fetch(`${link}/day/delete`, {
-            method: 'DELETE',
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                "id": ID
-            })
-        }).then(window.location.reload(true))
-    }
+    const handleDelete = (idday) => {
+        fetch(`${link}/day/delete/${idday}`)
+        .then(response => response.json())
+        .then(
+            (response) => {
+                console.log(response);
+                setDays(response.data);
+            }
+        )}
 
     return(
         <div className="home-content">
@@ -76,19 +73,19 @@ const Home = () => {
                                 <td>{day.sugarLevel}</td>
                                 <td>{day.mood}</td>
                                 <td>{day.meals.map(
-                                    (meal) => {
-                                        return (<p>- {meal}</p>)
+                                    (meal, index) => {
+                                        return (<p key={index}>- {meal}</p>)
                                     }
                                 )}</td>
                                 <td>{day.notes.map(
-                                    (note) => {
-                                        return (<p>- {note}</p>)
+                                    (note, index) => {
+                                        return (<p key={index}>- {note}</p>)
                                     }
                                 )}</td>
                                 <td className="table-options">
                                     <ul>
                                         {/* <li onClick={() => handleEdit(day.id)}>Changer</li> */}
-                                        {/* <li onClick={() => handleDelete(day.id)}>Supprimer</li> */}
+                                        <li onClick={() => handleDelete(day.idday)}>Supprimer</li>
                                     </ul>
                                 </td>
                             </tr>

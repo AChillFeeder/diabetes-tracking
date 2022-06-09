@@ -36,7 +36,7 @@ const useFetch = (url) => { // need to start with use
 
     }, [url]);
 
-    return { data, isLoading, error }
+    return data
 }
 
 export default useFetch;

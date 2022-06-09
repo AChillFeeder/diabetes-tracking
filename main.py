@@ -56,7 +56,6 @@ def login() -> tuple:
 
 @app.route("/user/getUserInformation")
 def get_user_information() -> str:
-    print(f"controller session: {controller.session}")
 
     userData = controller.user.getUserData(controller.session)
     userDays_ = controller.days.getDayByUser(controller.session)
@@ -127,13 +126,16 @@ def edit_day() -> tuple:
     """
     pass
 
-@app.route("/day/delete", methods=["DELETE"])
-def delete_day() -> tuple:
+@app.route("/day/delete/<id>", methods=["GET"])
+def delete_day(id) -> tuple:
     """
         Takes ID as argument
         returns status code 200
     """
-    pass
+    success = controller.days.deleteDayByID(id)
+
+    days = get_user_information()["data"]["userDays"]
+    return {"message": "Day deleted successfully", "success": True, "data": days}, 201
 
 
 
