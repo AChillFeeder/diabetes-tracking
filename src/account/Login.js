@@ -20,8 +20,8 @@ const Login = () => {
             body: JSON.stringify({"username": username, "password": password})
         }).then(response => response.json())
         .then((data) => {
+            console.log(data)
             if(data.success){
-                console.log(data);
                 history.push('/home')
             }else{
                 setError("Nom d'utilisateur ou mot de passe incorrect.")

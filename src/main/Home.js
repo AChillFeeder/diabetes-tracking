@@ -5,18 +5,21 @@ const Home = () => {
 
     const [error, setError] = useState("")
     const [days, setDays] = useState([])
+    const [userData, setUserData] = useState([])
     const [reload, setReload] = useState(false)
 
     useEffect(() => { // Used to avoid the infinite loop issue
-        fetch(`${link}/user/days`, {
+        fetch(`${link}/user/getUserInformation`, {
             method: 'GET',
             headers: { "Content-Type": "application/json" }
         }).then(response => response.json())
-        .then((data) => {
-            if(data.retrieved){
-                setDays(data.days)
+        .then((response) => {
+            console.log(response)
+            if(response.success){
+                setDays(response.data.userDays)
+                setUserData(response.data.userData)
             }else{
-                setError("Impossible de trouver vos jours pour le moment. | " + data.message)
+                setError("Impossible de trouver vos jours pour le moment. | " + response.message)
             }  
             })
     }, [])
@@ -57,21 +60,35 @@ const Home = () => {
                                 <th>Date</th>
                                 <th>Poids</th>
                                 <th>Glycemie</th>
+                                <th>Humeur</th>
+                                <th>Repas</th>
+                                <th>Notes</th>
                                 <th>Options</th>
                             </tr>
                         </thead>
 
                         <tbody>
                         {days.map(day => (
-                            <tr key={day.id}>
-                                <td>{day.id}</td>
-                                <td>{day.date}</td>
+                            <tr key={day.idday}>
+                                <td>{day.idday}</td>
+                                <td>{day.time}</td>
                                 <td>{day.weight}</td>
-                                <td>{day.sugar_amount}</td>
-                                <td class="table-options">
+                                <td>{day.sugarLevel}</td>
+                                <td>{day.mood}</td>
+                                <td>{day.meals.map(
+                                    (meal) => {
+                                        return (<p>- {meal}</p>)
+                                    }
+                                )}</td>
+                                <td>{day.notes.map(
+                                    (note) => {
+                                        return (<p>- {note}</p>)
+                                    }
+                                )}</td>
+                                <td className="table-options">
                                     <ul>
                                         {/* <li onClick={() => handleEdit(day.id)}>Changer</li> */}
-                                        <li onClick={() => handleDelete(day.id)}>Supprimer</li>
+                                        {/* <li onClick={() => handleDelete(day.id)}>Supprimer</li> */}
                                     </ul>
                                 </td>
                             </tr>

@@ -33,7 +33,7 @@ def register() -> tuple:
         return jsonify({"message": "Duplicate username", "success": False}), 406 # 406 for Not Acceptable
 
 @app.route("/login", methods=["POST"])
-def connect_user() -> tuple:
+def login() -> tuple:
     """
         Take USERNAME, PASSWORD as arguments\n
         HTTP Status Code 201 - 401
@@ -56,10 +56,25 @@ def connect_user() -> tuple:
 
 @app.route("/user/getUserInformation")
 def get_user_information() -> str:
-    userData = controller.user.getUserData(controller.session)
-    userDays = controller.days.getDayByUser(controller.session)
+    print(f"controller session: {controller.session}")
 
-    print(userData, userDays)
+    userData = controller.user.getUserData(controller.session)
+    userDays_ = controller.days.getDayByUser(controller.session)
+    userDays = []
+    for day in userDays_:
+        userDays.append(
+            {
+                "idday": day[0],
+                "time": day[1],
+                "weight": day[2],
+                "sugarLevel": day[3],
+                "mood": day[4],
+                "meals": day[5].split(";;"),
+                "notes": day[6].split(";;"),
+                "iduser": day[7]
+            }
+        )
+    
 
     return {
             "message": "Data retrieved",
