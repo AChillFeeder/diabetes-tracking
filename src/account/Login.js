@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useHistory } from "react-router";
 import {Link} from 'react-router-dom';
-import {ReactSession} from 'react-client-session';
 import {link} from "../usables/baseLink.js";
 
 const Login = () => {
@@ -15,14 +14,14 @@ const Login = () => {
     const handleSubmit = (event) => {
         event.preventDefault();
 
-        fetch(`${link}/user/connect`, {
+        fetch(`${link}/login`, {
             method: 'POST',
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({"username": username, "password": password})
         }).then(response => response.json())
         .then((data) => {
-            if(data.connected){
-                ReactSession.set("user_id", data["user_id"]);
+            if(data.success){
+                console.log(data);
                 history.push('/home')
             }else{
                 setError("Nom d'utilisateur ou mot de passe incorrect.")
