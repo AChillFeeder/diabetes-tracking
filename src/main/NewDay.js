@@ -87,7 +87,17 @@ const NewDay = () => {
                     min="0" 
                     id="mood" 
                     value={mood} 
-                    onChange={(e) => setMood(e.target.value)}
+                    onChange={
+                        (e) => {
+                            if(e.target.value < 10 && e.target.value > 0){
+                                setMood(e.target.value)
+                            }else if (e.target.value < 0){
+                                setMood(0)
+                            }else if (e.target.value > 10){
+                                setMood(10)
+                            }
+                        }
+                    }
                 />
 
                 <label htmlFor="meals">Vos repas: </label>

@@ -14,18 +14,19 @@ A simple application where you log your weight and glycemy every day, you can th
 - [ ] Statistics page with in-depth information
 
 # DO'S:
-- [ ] Check inputs in NewDay (don't allow mood more than 10 for example)
-- [ ] Add Session decorator
-- [ ] Graphs
-- [ ] Delete Day
-- [ ] Update Day
-- [ ] update API documentation, some returns have changed
+- [x] Delete Day
 - [x] change weight to FLOAT
-- [ ] Language change in option.
+- [x] Check inputs in NewDay (don't allow mood more than 10 for example)
 - [ ] More stats ( average of this week/month, best/worst day )
+- [ ] Graphs
+- [ ] Sorting
+- [ ] Only show N number of days in home screen.
 - [ ] Better Date format in Home screen.
 - [ ] Enable theme change in Settings.
-- [ ] Only show N number of days in home screen.
+- [ ] Add Session decorator
+- [ ] Language change in option.
+- [ ] Update Day
+- [ ] update API documentation, some returns have changed
 
 # Screenshots:
 ## Home screen

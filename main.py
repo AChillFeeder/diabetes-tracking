@@ -103,10 +103,6 @@ def add_day() -> tuple:
         Create a user and return HTTP Status Code 201 - 500
     """
     data = request.json
-    print(data["meals"])
-    print(type(data["meals"]))
-    print(data["notes"])
-    print(type(data["notes"]))
     controller.days.addDay(
         data["weight"],
         data["sugarLevel"],
@@ -137,7 +133,14 @@ def delete_day(id) -> tuple:
     days = get_user_information()["data"]["userDays"]
     return {"message": "Day deleted successfully", "success": True, "data": days}, 201
 
-
+@app.route("/user/statistics", methods=["GET"])
+def statistics() -> str:
+    result = controller.getUserStatistics()
+    return {
+        "success": True,
+        "message": "Statistics retrieved",
+        "data": result
+    }
 
 if __name__ == '__main__':
     app.run('0.0.0.0', 80, DEBUG)

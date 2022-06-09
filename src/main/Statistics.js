@@ -1,24 +1,25 @@
 import { useEffect } from 'react'
 import { useState } from "react";
 import {link} from "../usables/baseLink.js";
-import Graph from "../microComponents/Graph.js"
+import Graph from "../microComponents/Graph.js";
 
 const Statistics = () => {
 
     const [error, setError] = useState("")
-    const [data, setData] = useState(null)
+    const [stats, setStats] = useState({})
 
     useEffect(() => { // Used to avoid the infinite loop issue
-        fetch(`${link}/user/days`, {
+        fetch(`${link}/user/statistics`, {
             method: 'GET',
             headers: { "Content-Type": "application/json" }
         })
         .then(response => response.json())
-        .then((data) => {
-            if(data.retrieved){
-                setData(data.days)
+        .then((response) => {
+            if(response.success){
+                console.log(response);
+                setStats(response.data);
             }else{
-                setError("Impossible de trouver vos jours pour le moment. | " + data.message)
+                setError("Impossible de trouver vos jours pour le moment. | " + response.message)
             }
         })
     }, [])
@@ -27,14 +28,7 @@ const Statistics = () => {
     
     return ( 
         <div className="stats">
-            {
-                data && (data.length && 
-                <div className="container">
-                    <Graph values={data} error={error}></Graph>
-                    <p>La courbe en <span style={{"color": "blue"}}>BLEU</span> represente votre POIDS.</p>
-                    <p>La courbe en <span style={{"color": "red"}}>ROUGE</span> represente votre GLYCEMIE.</p>
-                </div>
-            )}
+            <Graph stats={stats}/>
             {error && <p>Erreur: {error}</p>}
         </div>
      );
