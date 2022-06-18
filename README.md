@@ -9,7 +9,7 @@ A simple application where you log your weight and glycemy every day, you can th
 - Add Day now accepts both form data and JSON
 
 # REFACTORING:
-- [ ] Add more properties to 'Day', Eg: meals, notes, mood
+- [x] Add more properties to 'Day', Eg: meals, notes, mood
 - [ ] Graphs for everything
 - [ ] Statistics page with in-depth information
 
@@ -17,6 +17,7 @@ A simple application where you log your weight and glycemy every day, you can th
 - [x] Delete Day
 - [x] change weight to FLOAT
 - [x] Check inputs in NewDay (don't allow mood more than 10 for example)
+- [ ] Adding date and time in NewDay form
 - [ ] More stats ( average of this week/month, best/worst day )
 - [ ] Graphs
 - [ ] Sorting

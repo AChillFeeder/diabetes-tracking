@@ -13,7 +13,7 @@ import { Line } from 'react-chartjs-2';
 
 
 
-const Graph = ({stats}) => {
+const WeightGraph = ({stats}) => {
 
     ChartJS.register(
         CategoryScale,
@@ -33,7 +33,7 @@ const Graph = ({stats}) => {
         },
         title: {
           display: true,
-          text: 'Chart.js Line Chart',
+          text: 'Poids a travers le temps',
         },
       },
     };
@@ -52,8 +52,8 @@ const Graph = ({stats}) => {
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
             },
             {
-            label: 'last 10 average weight',
-            data: [stats.last_10_average_weight],
+            label: 'La moyenne des dix derniers enregistrements',
+            data: new Array(stats.all_weights.length).fill(stats.last_10_average_weight),
             borderColor: 'rgb(53, 162, 235)',
             backgroundColor: 'rgba(53, 162, 235, 0.5)',
             },
@@ -69,4 +69,4 @@ const Graph = ({stats}) => {
     );
 }
  
-export default Graph;
+export default WeightGraph;

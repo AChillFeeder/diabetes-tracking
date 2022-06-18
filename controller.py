@@ -29,8 +29,14 @@ class Controller:
             result = sum(list) / len(list)
             return round(result, 2)
 
+        # every single recording in the database
         all_timestamps = [day["time"] for day in userDays]
         all_weights = [day["weight"] for day in userDays]
+
+        # recording we will realistically use
+        all_timestamps = all_timestamps[-50:]
+        all_weights = all_weights[-50:]
+
         all_sugarLevels = [day["sugarLevel"] for day in userDays]
         last_10_weights = all_weights[-10:]
         last_10_sugarLevels = all_sugarLevels[-10:]

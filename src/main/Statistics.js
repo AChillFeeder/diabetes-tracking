@@ -1,14 +1,16 @@
 import { useEffect } from 'react'
 import { useState } from "react";
 import {link} from "../usables/baseLink.js";
-import Graph from "../microComponents/Graph.js";
+import WeightGraph from "../microComponents/WeightGraph.js";
 
 const Statistics = () => {
 
-    const [error, setError] = useState("")
-    const [stats, setStats] = useState({})
+    const [error, setError] = useState("");
+    const [stats, setStats] = useState({});
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => { // Used to avoid the infinite loop issue
+        setIsLoading(true);
         fetch(`${link}/user/statistics`, {
             method: 'GET',
             headers: { "Content-Type": "application/json" }
@@ -16,8 +18,8 @@ const Statistics = () => {
         .then(response => response.json())
         .then((response) => {
             if(response.success){
-                console.log(response);
                 setStats(response.data);
+                setIsLoading(false);
             }else{
                 setError("Impossible de trouver vos jours pour le moment. | " + response.message)
             }
@@ -28,7 +30,8 @@ const Statistics = () => {
     
     return ( 
         <div className="stats">
-            <Graph stats={stats}/>
+            {isLoading && <p>Loading...</p>}
+            {!isLoading && <WeightGraph stats={stats}/>}
             {error && <p>Erreur: {error}</p>}
         </div>
      );
